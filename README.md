@@ -42,6 +42,7 @@ World-Map-Explorer is an inclusive and educational mapping tool designed for ind
 
 - **Map Layout Options:** Switch between political and geographical views to please your viewing experience.
 
+- **Path Navigation:** Navigate through roads, railways, rivers, and other paths using the cursor to explore connected places and get real-time information about locations you pass through.
 
 ---
 

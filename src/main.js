@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2023-25 Zendalona
  * This software is licensed under the GPL-3.0 License.

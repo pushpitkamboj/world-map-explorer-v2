@@ -2,7 +2,6 @@
   "name": "wme",
   "version": "1.0.0",
   "type": "module",
-  
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -24,5 +23,8 @@
     "eslint-plugin-prettier": "^5.2.1",
     "globals": "^15.14.0",
     "prettier": "^3.4.2"
+  },
+  "dependencies": {
+    "leaflet": "^1.9.4"
   }
 }

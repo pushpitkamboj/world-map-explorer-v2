@@ -146,6 +146,7 @@ export const Marker = L.CircleMarker.extend({
     // }
     this._borderPoints = findborderpoints.bind(this)(this._geoJson);// Update border points on every position change
     fetchElevation(this);
+    fetchGeography(this); // Add this line
   },
 });
 
@@ -170,6 +171,65 @@ const fetchElevation = _.throttle(async (marker) => {
     .catch((error) => {
       console.error('Error in fetching place name:', error);
     });
+}, 1001);
+
+//fetch the features of the pointer location from the overpass api
+const fetchGeography = _.throttle(async (marker) => {
+  const lat = marker.getLatLng().lat;
+  const long = marker.getLatLng().lng;
+
+  let dist = 300; //distance in meters
+
+  try {
+    let retries = 4;
+    let data;
+      for(let i = 0; i < retries; i++) {
+        dist = dist * 2;
+        let Q = `
+        [out:json][timeout:25];
+      (
+        node(around:${dist}, ${lat}, ${long})[natural];
+        way(around:${dist}, ${lat}, ${long})[natural];
+        relation(around:${dist}, ${lat}, ${long})[natural];
+      );
+      out center;
+    `;
+    
+      Q = encodeURIComponent(Q);
+    
+      const overpassUrl = `https://overpass-api.de/api/interpreter`;
+
+      const response = await fetch(overpassUrl,{
+        method: 'POST',
+        body: `data=${Q}`,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
+
+      data = await response.json();
+      if (data.elements && data.elements.length > 0) {
+        break;
+      } else {
+       // console.log(`No data found, retrying...${i}`);
+      }
+      
+    }
+
+    if (data.elements && data.elements.length > 0) {
+      const features = data.elements
+        .filter(el => el.tags && el.tags.natural)
+        .map(el => el.tags.natural)
+        .filter(Boolean);
+      document.getElementById('geography').innerHTML = 
+        `Geography: ${features.slice(0, 1).join(', ')}`;
+    }
+    else{
+      document.getElementById('geography').innerHTML = 'No features found';
+    }
+  } catch (error) {
+   // console.error('Error fetching geography:', error);
+  }
 }, 1001);
 
 

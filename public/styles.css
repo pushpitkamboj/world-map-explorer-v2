@@ -348,6 +348,13 @@ header button{
   padding-left: 50px;
 }
 
+#geography {
+  align-items: right;
+  float: right;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
 .dist-input{
   margin-left: 7px;
   padding: 3px;
